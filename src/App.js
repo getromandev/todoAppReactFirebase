@@ -3,17 +3,32 @@ import './App.css';
 
 function App() {
   // state is similiar to the brains capacity to hold short term memories.
-  const [toDo, setTodos] = useState([]);
+  const [toDo, setTodos] = useState(['Make food 🥫', 'Feed the fish 🐠', 'test 🧦 ']);
+  const [input, setInput] = useState('');
+  console.log('🇵🇷', input);  
+
+  const addTodo = (event) => {
+    // everytime the button is clicked this function is called
+    event.preventDefault();
+
+    console.log('👾')
+    setTodos([...toDo, input]);
+  }
 
   return (
     <div className="App">
       <h1>Hello World 🚀 </h1>
-      <input />
-      <button>Add Todo</button>
+
+      <form>
+        <input value={input} onChange={event => setInput(event.target.value)}/>
+        <button type='submit' onClick={addTodo}>Add Todo</button>
+      </form>
 
       <ul>
-        <li>Make food 🥫 </li>
-        <li>Feed the fish 🐠 </li>
+        {/* lop through the state and render new items  */}
+        {toDo.map(todo => (
+          <li>{todo}</li>
+        ))}  
       </ul>
 
     </div>
