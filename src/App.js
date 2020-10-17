@@ -9,10 +9,11 @@ function App() {
 
   const addTodo = (event) => {
     // everytime the button is clicked this function is called
-    event.preventDefault();
-
+    event.preventDefault(); // stop refresh
     console.log('👾')
+
     setTodos([...toDo, input]);
+    setInput(''); // clear the input after submit
   }
 
   return (
