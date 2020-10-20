@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
+import Todo from './Todo';
 import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
 import './App.css';
 
 function App() {
   // state is similiar to the brains capacity to hold short term memories.
-  const [toDo, setTodos] = useState(['Make food 🥫', 'Feed the fish 🐠', 'test 🧦 ']);
+  const [todos, setTodos] = useState(['Make food 🥫', 'Feed the fish 🐠', 'test 🧦 ']);
   const [input, setInput] = useState('');
   console.log('🇵🇷', input);  
 
@@ -13,7 +14,7 @@ function App() {
     event.preventDefault(); // stop refresh
     console.log('👾')
 
-    setTodos([...toDo, input]);
+    setTodos([...todos, input]);
     setInput(''); // clear the input after submit
   }
 
@@ -22,8 +23,7 @@ function App() {
       <h1>Hello World 🚀 </h1>
 
       <form>
-        {/* <input value={input} onChange={event => setInput(event.target.value)}/> */}
-
+        
         <FormControl>
           <InputLabel>Write a todo</InputLabel>
           <Input value={input} onChange={event => setInput(event.target.value)}/>
@@ -32,16 +32,15 @@ function App() {
         <Button disabled={!input} type='submit' onClick={addTodo}  variant="contained" color="primary">
           Add Todo
         </Button>
-        {/* <button type='submit' onClick={addTodo}>Add Todo</button> */}
+        
       </form>
 
       <ul>
-        {/* lop through the state and render new items  */}
-        {toDo.map(todo => (
-          <li>{todo}</li>
+        {/* loop through the state and render new items  */}
+        {todos.map(todo => (
+          <Todo text={todo} />      
         ))}  
       </ul>
-
     </div>
   );
 }
