@@ -1,20 +1,33 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Todo from './Todo';
 import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
 import './App.css';
+import db from './firebase';
+import firebase from 'firebase';
 
 function App() {
   // state is similiar to the brains capacity to hold short term memories.
-  const [todos, setTodos] = useState(['Make food 🥫', 'Feed the fish 🐠', 'test 🧦 ']);
+  const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
-  console.log('🇵🇷', input);  
+
+  // when the app loads, we need to listen to the database and fetch new todos as they get added or removed
+  useEffect(() => {
+    // when applicationCache.js loads this code runs 
+    db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+      setTodos(snapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo})))
+    })
+  }, []);
 
   const addTodo = (event) => {
     // everytime the button is clicked this function is called
     event.preventDefault(); // stop refresh
-    console.log('👾')
 
-    setTodos([...todos, input]);
+    db.collection('todos').add({
+      todo: input,
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+
+    // setTodos([...todos, input]);
     setInput(''); // clear the input after submit
   }
 
@@ -38,7 +51,7 @@ function App() {
       <ul>
         {/* loop through the state and render new items  */}
         {todos.map(todo => (
-          <Todo text={todo} />      
+          <Todo key={todo} todo={todo} />      
         ))}  
       </ul>
     </div>
