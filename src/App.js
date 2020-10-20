@@ -9,13 +9,12 @@ function App() {
   // state is similiar to the brains capacity to hold short term memories.
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
-  console.log('🇵🇷', input); 
 
   // when the app loads, we need to listen to the database and fetch new todos as they get added or removed
   useEffect(() => {
     // when applicationCache.js loads this code runs 
     db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-      setTodos(snapshot.docs.map(doc => doc.data().todo))
+      setTodos(snapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo})))
     })
   }, []);
 
@@ -28,7 +27,7 @@ function App() {
       timeStamp: firebase.firestore.FieldValue.serverTimestamp()
     })
 
-    setTodos([...todos, input]);
+    // setTodos([...todos, input]);
     setInput(''); // clear the input after submit
   }
 
@@ -52,7 +51,7 @@ function App() {
       <ul>
         {/* loop through the state and render new items  */}
         {todos.map(todo => (
-          <Todo text={todo} />      
+          <Todo key={todo} todo={todo} />      
         ))}  
       </ul>
     </div>
